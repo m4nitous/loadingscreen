@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>m4nitous</title>
+    <style>
+        @font-face {
+            font-family: 'Ambisi';
+            src: url('./ambisi.otf') format('opentype');
+            font-display: swap;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Ambisi', monospace;
+            background: #ffffff;
+            color: #000000;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        body.dark {
+            background: #000000;
+            color: #ffffff;
+        }
+
+        .loading-container {
+            position: relative;
+            text-align: center;
+        }
+
+        .main-text {
+            font-size: 4rem;
+            font-weight: bold;
+            letter-spacing: 0.5rem;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        .char {
+            opacity: 0;
+            padding-right: 5px;
+            animation: typeVertical 0.8s ease-out forwards;
+        }
+
+        .char:nth-child(1) { animation-delay: 0.2s; }
+        .char:nth-child(2) { animation-delay: 0.4s; }
+        .char:nth-child(3) { animation-delay: 0.6s; }
+        .char:nth-child(4) { animation-delay: 0.8s; }
+        .char:nth-child(5) { animation-delay: 1.0s; }
+        .char:nth-child(6) { animation-delay: 1.2s; }
+        .char:nth-child(7) { animation-delay: 1.4s; }
+        .char:nth-child(8) { animation-delay: 1.6s; }
+
+        @keyframes typeVertical {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .animation-selector {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: 2px solid #000;
+            background: transparent;
+            font-family: Arial, sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #000;
+            color: #fff;
+        }
+
+        body.dark .btn {
+            border-color: #fff;
+            color: #fff;
+        }
+
+        body.dark .btn:hover {
+            background: #fff;
+            color: #000;
+        }
+
+        @media (max-width: 768px) {
+            .main-text {
+                font-size: 2.5rem;
+                letter-spacing: 0.3rem;
+            }
+            
+            .animation-selector {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-container">
+        <div class="main-text" id="mainText">
+            <span class="char">m</span>
+            <span class="char">4</span>
+            <span class="char">n</span>
+            <span class="char">i</span>
+            <span class="char">t</span>
+            <span class="char">o</span>
+            <span class="char">u</span>
+            <span class="char">s</span>
+        </div>
+    </div>
+
+    <div class="animation-selector">
+        <button class="btn" onclick="restartAnimation()">Restart</button>
+        <button class="btn" onclick="toggleTheme()">Dark</button>
+    </div>
+
+    <script>
+        function restartAnimation() {
+            const mainText = document.getElementById('mainText');
+            const chars = mainText.querySelectorAll('.char');
+            
+            // Reset all characters
+            chars.forEach(char => {
+                char.style.animation = 'none';
+                char.offsetHeight; // Trigger reflow
+                char.style.animation = null;
+            });
+        }
+
+        function toggleTheme() {
+            const body = document.body;
+            const themeBtn = document.querySelector('button[onclick="toggleTheme()"]');
+            
+            body.classList.toggle('dark');
+            
+            if (body.classList.contains('dark')) {
+                themeBtn.textContent = 'Light';
+            } else {
+                themeBtn.textContent = 'Dark';
+            }
+        }
+
+        // Auto-restart animation every 5 seconds
+        setInterval(() => {
+            restartAnimation();
+        }, 5000);
+    </script>
+</body>
+</html>
