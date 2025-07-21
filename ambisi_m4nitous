@@ -1,0 +1,99 @@
+// animation.js - Complete vertical typing animation with div creation
+(function() {
+    // Add CSS styles with custom font
+    const styles = document.createElement('style');
+    styles.textContent = `
+        @font-face {
+            font-family: 'Ambisi';
+            src: url('./ambisi.otf') format('opentype');
+            font-display: swap;
+        }
+        
+        .vertical-animation-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Ambisi', 'Courier New', monospace;
+            font-size: 4rem;
+            font-weight: bold;
+            letter-spacing: 0.5rem;
+            text-transform: uppercase;
+            line-height: 1.2;
+            z-index: 1000;
+        }
+        
+        .vertical-text {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .vertical-char {
+            opacity: 0;
+            transform: translateY(-30px);
+            animation: dropDown 0.6s ease-out forwards;
+        }
+        
+        @keyframes dropDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px) scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .vertical-animation-container {
+                font-size: 2.5rem;
+                letter-spacing: 0.3rem;
+            }
+        }
+    `;
+    document.head.appendChild(styles);
+    
+    function createVerticalAnimation() {
+        // Create container div
+        const container = document.createElement('div');
+        container.className = 'vertical-animation-container';
+        
+        // Create text container
+        const textContainer = document.createElement('div');
+        textContainer.className = 'vertical-text';
+        
+        // Text to animate
+        const text = 'm4nitous';
+        
+        // Create each character as a separate div (vertical stack)
+        text.split('').forEach((char, index) => {
+            const charDiv = document.createElement('div');
+            charDiv.className = 'vertical-char';
+            charDiv.textContent = char;
+            charDiv.style.animationDelay = `${index * 0.2}s`;
+            textContainer.appendChild(charDiv);
+        });
+        
+        container.appendChild(textContainer);
+        document.body.appendChild(container);
+        
+        // Auto-restart animation every 5 seconds
+        setInterval(() => {
+            const chars = container.querySelectorAll('.vertical-char');
+            chars.forEach(char => {
+                char.style.animation = 'none';
+                char.offsetHeight; // Force reflow
+                char.style.animation = null;
+            });
+        }, 5000);
+    }
+    
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', createVerticalAnimation);
+    } else {
+        createVerticalAnimation();
+    }
+})();
